@@ -1,0 +1,6 @@
+This is the SapQR:
+Authors:
+Christopher Lai
+Luciano Biondi Gonzalez
+Nicholas Miller
+Erik Yeomans
