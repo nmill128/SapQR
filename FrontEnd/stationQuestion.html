@@ -1,0 +1,103 @@
+<html>
+<head>
+	<!-- Screen Meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Meta Data -->
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="../../favicon.ico">
+	<title>Session Login</title>
+	
+	<!-- Material Design Boostrap CSS -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
+	<link rel="stylesheet" type="text/css" href="css/ripples.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<!-- Material Design Boosrap JS -->
+	<script src="js/jquery-2.2.2.min.js" />
+	<script src="js/bootstrap.min.js" />
+	<script src="js/material.min.js" />
+	<script src="js/ripples.min.js" />
+	<script>
+		$.material.init();
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">SapQR</a>
+			</div>
+		</div>
+	</nav>
+	
+	<section class="container" style="width:600px">
+		<h3>Station 1</h3>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Survey</h3>
+			</div>
+			<div class="panel-body">
+				<p>Thank you for compeleting this activity, please take a moment to respond.</p>
+				<form action="stationOverview.html">
+					<formset>
+						<p>Do you think sexual assasult occured?</p>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+								<span class="circle"></span><span class="check"></span>Yes
+							</label>
+						</div>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+								<span class="circle"></span><span class="check"></span>No
+							</label>
+						</div>
+					</formset>
+
+					<formset>
+						<p>Did you take any action?</p>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios1" id="optionsRadios11" value="option1" checked="">
+								<span class="circle"></span><span class="check"></span>Yes
+							</label>
+						</div>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios1" id="optionsRadios21" value="option2">
+								<span class="circle"></span><span class="check"></span>No
+							</label>
+						</div>
+					</formset>
+
+					<formset>
+						<p>Would you have acted different?</p>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios2" id="optionsRadios12" value="option1" checked="">
+								<span class="circle"></span><span class="check"></span>Yes
+							</label>
+						</div>
+						<div class="radio radio-primary">
+							<label>
+								<input type="radio" name="optionsRadios2" id="optionsRadios22" value="option2">
+								<span class="circle"></span><span class="check"></span>No
+							</label>
+						</div>
+					</formset>
+
+					<button id="takeActionButton"  class="btn btn-raised btn-primary" style="display: block;margin:0 auto; width: 200px">Submit</button>
+				</form>
+				
+			</div>
+		</div>
+	</section>
+	
+</body>
+</html>
