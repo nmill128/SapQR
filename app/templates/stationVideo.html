@@ -41,8 +41,8 @@
 				    <iframe  src="https://www.youtube.com/embed/c2ZSZrGc-O8" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<div class="row">
-				  <div class="col-md-4">Uncomfortable</div>
-				  <div class="col-md-4 col-md-offset-4 text-right">Comfortable</div>
+				  <div class="col-md-4">Comfortable</div>
+				  <div class="col-md-4 col-md-offset-4 text-right">Uncomfortable</div>
 				</div>
 				<div class="row">
 					<div class=".col-md-4">
@@ -75,7 +75,7 @@
 		var comfortSlider = document.getElementById('comfortSlider');
 
 		noUiSlider.create(comfortSlider,{
-			start: 4,
+			start: 1,
 			range: {
 				'min':  1 ,
 				'max': 5 
@@ -83,7 +83,7 @@
 		});
 
 		comfortSlider.noUiSlider.on('slide', function(){
-			if(comfortSlider.noUiSlider.get() < 3){
+			if(comfortSlider.noUiSlider.get() > 4){
 				$('#takeActionButton').css('visibility', 'visible');
 			}
 		});
