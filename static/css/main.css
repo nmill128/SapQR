@@ -12,3 +12,10 @@
     margin: 16px 0 0 0;
     text-align: right;
 }
+
+@media only screen and (min-width : 768px) {
+.customLabel{
+    text-align: left;
+
+}
+}
