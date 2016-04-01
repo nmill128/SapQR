@@ -22,14 +22,17 @@
 </head>
 <body>
 	
-	
-	 <nav class="navbar navbar-default">
+	{% block title %}{% endblock title %}
+	{% if self.title() %} 
+	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="/">SapQR</a>
 			</div>
 		</div>
 	</nav>
+	{% endif %}
+	 
 	{% block body %}{% endblock %}
 	
 	<!--
@@ -52,9 +55,8 @@
 	<script src="/static/js/ripples.min.js"></script>
 	<script src="/static/js/nouislider.min.js"></script>
 	<script>
-		$(document).ready(){
-			$.material.init();
-		}
+		$.material.init();
 	</script>
+	{% block script %}{% endblock %}
 </body>
 </html>
