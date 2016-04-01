@@ -1,8 +1,14 @@
 .maxWidthContainer{
 	max-width: 600px;
 }
+.customUser{
+	line-height: 1;
+    font-weight: 400;
+    margin: 16px 0 0 0;
+}
 .customLabel{
     line-height: 1;
     font-weight: 400;
     margin: 16px 0 0 0;
+    text-align: right;
 }
