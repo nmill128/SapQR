@@ -37,7 +37,7 @@ def stationVideo():
 def template():
     return render_template('template.html')
 
-@app.route("/userLogin")
+@app.route("/adminLogin")
 def userLogin():
     return render_template('login.html')
 
