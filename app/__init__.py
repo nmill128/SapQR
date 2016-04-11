@@ -38,23 +38,23 @@ def template():
     return render_template('template.html')
 
 @app.route("/userLogin")
-def template():
+def userLogin():
     return render_template('login.html')
 
 @app.route("/sessionList")
-def template():
+def sessionList():
     return render_template('sessionList.html')
 
 @app.route("/sessionInfo")
-def template():
+def sessionInfo():
     return render_template('sessionInfo.html')
 
 @app.route("/userInfo")
-def template():
+def userInfo():
     return render_template('userInfo.html')
 
 @app.route("/stationInfo")
-def template():
+def stationInfo():
     return render_template('stationInfo.html')
 
 if __name__ == "__main__":
