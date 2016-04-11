@@ -37,5 +37,25 @@ def stationVideo():
 def template():
     return render_template('template.html')
 
+@app.route("/loginPage")
+def template():
+    return render_template('login.html')
+
+@app.route("/sessionList")
+def template():
+    return render_template('sessionList.html')
+
+@app.route("/sessionInfo")
+def template():
+    return render_template('sessionInfo.html')
+
+@app.route("/userInfo")
+def template():
+    return render_template('userInfo.html')
+
+@app.route("/stationInfo")
+def template():
+    return render_template('stationInfo.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
