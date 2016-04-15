@@ -38,7 +38,7 @@ def template():
     return render_template('template.html')
 
 @app.route("/adminLogin")
-def userLogin():
+def adminLogin():
     return render_template('login.html')
 
 @app.route("/sessionList")
