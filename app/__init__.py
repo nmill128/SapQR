@@ -1,3 +1,4 @@
+import qrcode
 from flask import Flask
 from flask import render_template, request, redirect, url_for, flash
 from user import User
@@ -56,6 +57,24 @@ def userInfo():
 @app.route("/stationInfo")
 def stationInfo():
     return render_template('stationInfo.html')
+
+def makeQRCode(stationID):
+    picture=mongo.db.stations.find_one({'id':stationID})['picture']
+    if(picture not NONE):
+        return picture
+    link = mongo.db.stations.find_one({'id':stationID})['link']
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    qr.add_data(link)
+    qr.make(fit=True)
+
+    img = qr.make_image()
+    mongo.db.stations.update({'id':stationID},{$set:{"picture":img}})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
