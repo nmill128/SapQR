@@ -14,8 +14,12 @@
 }
 
 @media only screen and (min-width : 320px) {
-.customLabel{
-    text-align: left;
+	.customLabel{
+	    text-align: left;
 
+	}
 }
+
+.sessionTable tr td{
+	cursor: pointer;
 }
