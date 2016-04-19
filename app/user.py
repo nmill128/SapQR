@@ -26,8 +26,7 @@ class User():
 
     @staticmethod
     def validate_login(password_hash, password):
-        return password_hash == password
-        #return check_password_hash(password_hash, password)
+        return check_password_hash(password_hash, password)
 
 	def hash_password(password):
 		return generate_password_hash(password)
@@ -65,6 +64,7 @@ class CreateLoginForm(Form):
 	password2 = PasswordField('Password2', [validators.Required()])
 	gender = Field('Gender', [validators.Required()])
 	age = IntegerField('Age', [validators.Required()])
+	session_id = Field('Session Id', [validators.Required()])
 	
 	def __init__(self, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
@@ -82,7 +82,9 @@ class CreateLoginForm(Form):
 		doc =  {'username': self.username.data,
 				'gender':self.gender.data,
 				'age':self.age.data,
-				'password': generate_password_hash(self.password1.data)}
+				'password': generate_password_hash(self.password1.data),
+				'facilitator': False,
+				'session_id': self.session_id.data}
 		try:
 			app.mongo.db.users.insert(doc)
 		except pymongo.errors.DuplicateKeyError as e:

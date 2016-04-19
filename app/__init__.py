@@ -45,7 +45,7 @@ def sessionLogin():
 	form = CreateLoginForm(request.form)
 	if request.method == "GET":
 		counter = mongo.db.counters.find_and_modify(query={'_id': 'username'}, update={ "$inc": { "seq": 1 } }, upsert=False, fullresponse=True)
-		return render_template('sessionLogin.html', username=counter["seq"], form=form)
+		return render_template('sessionLogin.html', username=counter["seq"], form=form, session_id=1)
 	if form.validate():
 		session['user_id'] = form.user.get_id()
 		return u'<h2>Annonyamous user created:</h2><h1>%s</h1><h2>Please screen shot your userid in case you are logged out</h2>' % session['user_id']
