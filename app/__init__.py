@@ -58,10 +58,13 @@ def sessionLogin():
 		return redirect(url_for('loginThankYou', next=request.url))
 	return "validate fail"
 
+<<<<<<< HEAD
 @app.route("/loginThankYou")
 def loginThankYou():
 
     return render_template('loginThankYou.html', userid=session["user_id"])
+=======
+>>>>>>> 8b2096fa9d547f47cfc5218b40aa95874ccc7168
 
 @app.route("/stationOverview")
 def stationOverview():
@@ -99,6 +102,13 @@ def userInfo():
 def stationInfo():
     return render_template('stationInfo.html')
 
+<<<<<<< HEAD
+=======
+@app.route("/loginThankYou")
+def loginThankYou():
+    return render_template('loginThankYou.html')
+
+>>>>>>> 8b2096fa9d547f47cfc5218b40aa95874ccc7168
 @app.route("/wrongStation")
 def wrongStation():
     return render_template('wrongStation.html')
@@ -107,6 +117,9 @@ def wrongStation():
 def error404():
     return render_template('404.html')
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 8b2096fa9d547f47cfc5218b40aa95874ccc7168
 if __name__ == "__main__":
     app.run(debug=True)#,use_debugger=True)
