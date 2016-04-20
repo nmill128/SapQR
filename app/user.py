@@ -44,8 +44,6 @@ class LoginForm(Form):
 		if not rv:
 			return False
 		userEntry = app.mongo.db.users.find_one({'username': self.username.data})
-        #user = User.query.filter_by(
-        #    username=self.username.data).first()
 		if userEntry is None:
 			self.username.errors.append('Unknown username')
 			return False

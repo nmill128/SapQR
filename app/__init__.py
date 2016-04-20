@@ -4,7 +4,11 @@ from user import User, LoginForm, CreateLoginForm
 from werkzeug.debug import DebuggedApplication
 from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
+import qrviews
+
+
 app.wsgi_app = DebuggedApplication(app.wsgi_app, True)
+
 
 app.secret_key = "claiisbestlai"
 app.config['MONGO_DBNAME'] = 'sapQR'
