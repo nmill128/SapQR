@@ -55,9 +55,6 @@ def sessionLogin():
 		return u'<h2>Annonyamous user created:</h2><h1>%s</h1><h2>Please screen shot your userid in case you are logged out</h2>' % session['user_id']
 	return "validate fail"
 
-@app.route("/loginThankYou")
-def loginThankYou():
-    return render_template('loginThankYou.html')
 
 @app.route("/stationOverview")
 def stationOverview():
@@ -94,6 +91,18 @@ def userInfo():
 @app.route("/stationInfo")
 def stationInfo():
     return render_template('stationInfo.html')
+
+@app.route("/loginThankYou")
+def loginThankYou():
+    return render_template('loginThankYou.html')
+
+@app.route("/wrongStation")
+def wrongStation():
+    return render_template('wrongStation.html')
+
+@app.route("/404")
+def error404():
+    return render_template('404.html')
 
 if __name__ == "__main__":
     app.run(debug=True)#,use_debugger=True)
