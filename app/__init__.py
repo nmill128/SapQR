@@ -54,6 +54,11 @@ def sessionLogin():
 		session['user_id'] = form.user.get_id()
 		return u'<h2>Annonyamous user created:</h2><h1>%s</h1><h2>Please screen shot your userid in case you are logged out</h2>' % session['user_id']
 	return "validate fail"
+
+@app.route("/loginThankYou")
+def loginThankYou():
+    return render_template('loginThankYou.html')
+
 @app.route("/stationOverview")
 def stationOverview():
     return render_template('stationOverview.html')
