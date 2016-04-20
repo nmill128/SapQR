@@ -1,20 +1,22 @@
 {% extends "template.html" %}
 {% block body %}
 <section class="container maxWidthContainer">
-	<h3>Thank You For Logging In!</h3>
+	<h3 class="centerText">Thank You For Logging In!</h3>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<h3 class="panel-title">UserInfo</h3>
+			<h3 class="panel-title">User Info</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="col-md-3 customLabel">
-					UserID
+					Username
 				</div>
 				<div class="col-md-9 customUser">
 					<input type="text" class="form-control" name="username" value="169" readonly /> 
 				</div>
 			</div>
+			<br />
+			<br />
 			<p>Please write down or screenshot your username in case of an accidental logout.</p>
 			<a href="/stationVideo" class="btn btn-primary">Continue</a>
 		</div>
