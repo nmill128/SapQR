@@ -57,7 +57,8 @@ def sessionLogin():
 
 @app.route("/loginThankYou")
 def loginThankYou():
-    return render_template('loginThankYou.html')
+	
+    return render_template('loginThankYou.html', userid=session["user_id"])
 
 @app.route("/stationOverview")
 def stationOverview():
