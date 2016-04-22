@@ -9,8 +9,9 @@
 		<div class="panel-body">
 			<div id="pie_chart"></div>
 			<p>These are the stations you compeleted</p>
+			{% for station in stations %} 
 			<div class="row">
-				<div class="col-xs-10">Station 1 : Sexual Prevention</div>
+				<div class="col-xs-10">{{ station.name }} </div>
 				<div class="col-xs-2">
 					<div class="checkbox">
 						<label>
@@ -19,28 +20,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-10">Station 2 : Identify Assasult</div>
-				<div class="col-xs-2">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material">
-							<!-- <span class="check"></span> -->
-							</span> 
-						</label>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-10">Station 3 : Aftermath</div>
-				<div class="col-xs-2">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>
@@ -114,6 +94,6 @@ function fixStepArray(myArray, videoLength){
 	return newArray;
 }
 
-
+}
 </script>
 {% endblock %}
