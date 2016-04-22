@@ -10,8 +10,8 @@
 			<div class="col-md-8 col-xs-12">
 				<!-- Insert Chart in this div inside this Div -->
 				<h4 class="text-center">Chart</h4>
-				<div id="chart_div"></div>
-				<div id="chart_div2"></div>
+				
+				<div id="step_chart"></div>
 				<!-- End of Insert Chart in this div inside this Div -->
 			</div>
 			<div class="col-md-4 col-xs-12">
@@ -78,33 +78,12 @@
 	//drawDiv is the name of the div or element to draw the chart in, as a string
 	var myArrayP = [['Male', 10], ['Female', 20], ['Other', 3], ['Choose Not to Identify', 0]];
 	var myTitleP = "Temp Title Test";
-	var drawDivP = "chart_div";
+	var drawDivP = "pie_chart";
 	
 	
 	//Draw a pie chart
 	google.charts.setOnLoadCallback(function() { drawPieChart(myArrayP, myTitleP, drawDivP); });
 	
-	function drawPieChart(myArray, myTitle, drawDiv) {
-	
-		// Create the data table.
-		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Option');
-		data.addColumn('number', 'People');
-		data.addRows(myArray);
-
-		// Set chart options
-		var options = {title: 	myTitle,
-						titleTextStyle: {fontSize: 25},
-						width: 	"100%",
-						height:	500,
-						sliceVisibilityThreshold:	0,
-						pieSliceText: 'value-and-percentage',
-						enableInteractivity: 'false'
-					};
-
-		var chart = new google.visualization.PieChart(document.getElementById(drawDiv));
-		chart.draw(data, options);
-	}
 	
 //Used for stepped chart, makes an array incrementing by 10 for the horizontal ticks
 function makeTickArray(length){
@@ -144,7 +123,7 @@ function fixStepArray(myArray, videoLength){
 var myArrayST = [['Male', [[12, 10], [22, 30], [45, 50]]], ['Female', [[16, 30], [34, 50], [56, 80]]], ['Other', [[23, 30], [40, 60], [76, 100]]], ['Choose Not to Identify', [[35, 80]]]];
 var maxVidSizeS = 120;
 var myTitleS = "Title Test Stepped";
-var drawDivS = "chart_div2";
+var drawDivS = "step_chart";
 	
 //Draw a stepped chart
 google.charts.setOnLoadCallback(function() { drawSteppedChart(myArrayST, maxVidSizeS, myTitleS, drawDivS); });
