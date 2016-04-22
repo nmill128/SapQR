@@ -10,7 +10,8 @@
 			<div class="col-md-8 col-xs-12">
 				<!-- Insert Chart in this div inside this Div -->
 				<h4 class="text-center">Chart</h4>
-
+				<div id="chart_div"></div>
+				<div id="chart_div2"></div>
 				<!-- End of Insert Chart in this div inside this Div -->
 			</div>
 			<div class="col-md-4 col-xs-12">
@@ -63,5 +64,152 @@
 		</div>
 	</div>
 </section>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+			
+	//loading google charts stuff
+	google.charts.load('current', {'packages':['corechart']});
+	
+	//Three arguments necessary
+	//myArray is the array of multiple choice options in format [['Option1', X1], ['Option2', X2], ... , ['Option i', Xi]]
+	//myTitle is a string title of the chart
+	//drawDiv is the name of the div or element to draw the chart in, as a string
+	var myArrayP = [['Male', 10], ['Female', 20], ['Other', 3], ['Choose Not to Identify', 0]];
+	var myTitleP = "Temp Title Test";
+	var drawDivP = "chart_div";
+	
+	
+	//Draw a pie chart
+	google.charts.setOnLoadCallback(function() { drawPieChart(myArrayP, myTitleP, drawDivP); });
+	
+	function drawPieChart(myArray, myTitle, drawDiv) {
+	
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Option');
+		data.addColumn('number', 'People');
+		data.addRows(myArray);
+
+		// Set chart options
+		var options = {title: 	myTitle,
+						titleTextStyle: {fontSize: 25},
+						width: 	800,
+						height:	500,
+						sliceVisibilityThreshold:	0,
+						pieSliceText: 'value-and-percentage',
+						enableInteractivity: 'false'
+					};
+
+		var chart = new google.visualization.PieChart(document.getElementById(drawDiv));
+		chart.draw(data, options);
+	}
+	
+//Used for stepped chart, makes an array incrementing by 10 for the horizontal ticks
+function makeTickArray(length){
+	var arrayToReturn = new Array();
+	
+	var i = 0;
+	while(i < length){
+		arrayToReturn.push(i);
+		i += 10;
+	}
+	arrayToReturn.push(length);
+	
+	return arrayToReturn;
+}		
+
+//Used to fix chart problem, adds the value (0, 0) to front and a value for max time x
+//Shifts everything over to make it more cognitive
+function fixStepArray(myArray, videoLength){
+	var newArray = myArray;
+	newArray.unshift([0, 0]);
+	newArray.push([videoLength, 0]);
+	
+	for(var x = newArray.length - 1; x > 0; x--){
+		newArray[x][1] = newArray[x - 1][1];
+	}
+	
+	return newArray;
+}
+
+//Four arguments necessary
+//myArray is the array of (x,y) values in format [["Person 1", [[X1, Y1], [X2, Y2], ..., [Xi, Yi]]], ["Person 2", [[X1, Y1], [X2, Y2], ..., [Xi, Yi]]], ..., ["Person i", [[X1, Y1], [X2, Y2], ..., [Xi, Yi]]]]
+//maxVidSize is the length of the video for this chart
+//myTitle is a string title of the chart
+//drawDiv is the name of the div or element to draw the chart in, as a string
+//
+//************May run somewhat slow for large data sets********************
+var myArrayST = [['Male', [[12, 10], [22, 30], [45, 50]]], ['Female', [[16, 30], [34, 50], [56, 80]]], ['Other', [[23, 30], [40, 60], [76, 100]]], ['Choose Not to Identify', [[35, 80]]]];
+var maxVidSizeS = 120;
+var myTitleS = "Title Test Stepped";
+var drawDivS = "chart_div2";
+	
+//Draw a stepped chart
+google.charts.setOnLoadCallback(function() { drawSteppedChart(myArrayST, maxVidSizeS, myTitleS, drawDivS); });
+	
+function drawSteppedChart(myArray, maxVidSize, myTitle, drawDiv) {
+
+	//slide every y over one
+	for(var i = 0; i < myArray.length; i++){
+		myArray[i][1] = fixStepArray(myArray[i][1], maxVidSize);
+	}
+	
+	var data = new google.visualization.DataTable();
+	
+	//make the columns
+	data.addColumn('number', 'X');
+	for(var m = 0; m < myArray.length; m++){
+		data.addColumn('number', myArray[m][0]);
+	}
+	
+	//Make all values null
+	var dataTable = [];
+	var totalEntries = 0;
+	for(var q = 0; q < myArray.length; q++){
+		totalEntries = totalEntries + myArray[q][1].length;
+	}
+	
+	for(var h = 0; h < totalEntries; h++){
+		var emptyRow = [];
+		for(var w = 0; w <= myArray.length; w++){
+			emptyRow.push(null);
+		}
+		dataTable.push(emptyRow);
+	}
+	
+	//Set the X and Y values
+	var onRow = 0;
+	for(var j = 0; j < myArray.length; j++){
+		for(var k = 0; k < myArray[j][1].length; k++){
+			dataTable[onRow][0] = myArray[j][1][k][0];
+			dataTable[onRow][j + 1] = myArray[j][1][k][1];
+			onRow++;
+		}
+	}
+	
+	data.addRows(dataTable);
+
+	//chart options
+	var tickArray = makeTickArray(maxVidSize);
+	var options = {title: myTitle,
+					titleTextStyle: {fontSize: 25},
+					hAxis: {title: 'Video Time (seconds)',
+						viewWindow: {min: 0, max: maxVidSize},
+						ticks: tickArray},
+					vAxis: {title: 'Slider Value ',
+						ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+						showTextEvery: 1},
+					height: 800,
+					width: window.innerWidth,
+					areaOpacity: 0,
+					enableInteractivity: false};
+					
+	var chart = new google.visualization.SteppedAreaChart(document.getElementById(drawDiv));
+
+	chart.draw(data, options);
+}
+</script>
 {% endblock %}
 
