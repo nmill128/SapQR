@@ -12,6 +12,10 @@
 			    <source src="/static/vid/{{ video }}" type="video/mp4">	
 			  </video>
 			</div>
+			<div id="videoInstruction" class="row">
+				<p>Click on the video to start the activity</p>
+				<p>Move the slider to your comfort level during the video</p>
+			</div>
 			<div class="row">
 				<div class="col-xs-4">Comfortable</div>
 				<div class="col-xs-4 col-xs-offset-4 text-right">Uncomfortable</div>
@@ -30,7 +34,7 @@
 					<div id="comfortSlider" class="slider shor"></div>
 				</div>
 			</div>
-			<a id="takeActionButton" href="/stationQuestion" class="btn btn-raised btn-primary invisible" style="display: block;margin:0 auto; width: 200px">Take Action</a>
+			<a id="takeActionButton" href="/stationQuestion/{{ id }}" class="btn btn-raised btn-primary invisible" style="display: block;margin:0 auto; width: 200px">Take Action</a>
 		</div>
 	</div>
 </section>
@@ -38,13 +42,23 @@
 
 {% block script %}
 <script>
+	// Video
 	var myVideo = document.getElementById("video"); 
 
 	function play() { 
 	    if (myVideo.paused) 
 	        myVideo.play();
-	} 
+	    $('#videoInstruction').hide();
 
+	} 
+	myVideo.addEventListener('ended',myHandler,false);
+    function myHandler(e) {
+        window.location.replace("/stationQuestion/{{ id }}");
+    }
+
+
+
+	// Slider
 	var comfortSlider = document.getElementById('comfortSlider');
 
 	noUiSlider.create(comfortSlider,{
