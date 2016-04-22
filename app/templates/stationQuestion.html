@@ -8,7 +8,7 @@
 		</div>
 		<div class="panel-body">
 			<p>Thank you for compeleting this activity, please take a moment to respond.</p>
-			<form action="/stationOverview">
+			<form action="/stationOverview/{{ id }}">
 				{% for question in questionsList %}
 				{% set qloop = loop.index %}
 				<formset>

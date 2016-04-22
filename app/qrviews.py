@@ -11,7 +11,7 @@ def loadStation(id=None):
 	if stationEntry:
 		userEntry = module.mongo.db.users.find_one({"username":session["user_id"]})
 		if userEntry["session_id"] == stationEntry["session_id"]:
-			return render_template('stationVideo.html', id=id)
+			return render_template('stationVideo.html', id=id, video=stationEntry['video'])
 		return "sorry you are not allowed to view this page"
 	return "404 station not found"
 	

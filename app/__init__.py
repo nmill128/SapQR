@@ -1,4 +1,3 @@
-import qrcode
 from flask import Flask
 from flask import render_template, request, redirect, url_for, flash, session
 from user import User, LoginForm, CreateLoginForm, login_required
@@ -57,12 +56,12 @@ def logout():
 @app.route("/loginThankYou")
 @login_required
 def loginThankYou():
-
     return render_template('loginThankYou.html', userid=session["user_id"])
 
-@app.route("/stationOverview")
-def stationOverview():
-    return render_template('stationOverview.html')
+@app.route("/stationOverview/<id>")
+def stationOverview(id=None):
+	stationEntry = mongo.db.stations.find_one({"station_id":id})
+	return render_template('stationOverview.html')
 	
 @app.route("/stationQuestions/<id>")
 @login_required
@@ -71,7 +70,7 @@ def stationQuestion(id=None):
 	if stationEntry:
 		userEntry = mongo.db.users.find_one({"username":session["user_id"]})
 		if userEntry["session_id"] == stationEntry["session_id"]:
-			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"])
+			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"], id=id)
 		return "you do not have access"
 	return "404"
 	
@@ -106,25 +105,6 @@ def userInfo():
 @app.route("/stationInfo")
 def stationInfo():
     return render_template('stationInfo.html')
-
-
-def makeQRCode(stationID):
-    picture=mongo.db.stations.find_one({'id':stationID})['picture']
-    if(picture not NONE):
-        return picture
-    link = mongo.db.stations.find_one({'id':stationID})['link']
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    qr.add_data(link)
-    qr.make(fit=True)
-
-    img = qr.make_image()
-    mongo.db.stations.update({'id':stationID},{$set:{"picture":img}})
-
 
 @app.route("/wrongStation")
 def wrongStation():
