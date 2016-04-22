@@ -7,6 +7,7 @@
 			<h3 class="panel-title">Completed Station</h3>
 		</div>
 		<div class="panel-body">
+			<div id="pie_chart"></div>
 			<p>These are the stations you compeleted</p>
 			<div class="row">
 				<div class="col-xs-10">Station 1 : Sexual Prevention</div>
@@ -43,4 +44,76 @@
 		</div>
 	</div>
 </section>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+			
+	//loading google charts stuff
+	google.charts.load('current', {'packages':['corechart']});
+	
+	//Three arguments necessary
+	//myArray is the array of multiple choice options in format [['Option1', X1], ['Option2', X2], ... , ['Option i', Xi]]
+	//myTitle is a string title of the chart
+	//drawDiv is the name of the div or element to draw the chart in, as a string
+	var myArrayP = [['Male', 10], ['Female', 20], ['Other', 3], ['Choose Not to Identify', 0]];
+	var myTitleP = "Temp Title Test";
+	var drawDivP = "pie_chart";
+	
+	
+	//Draw a pie chart
+	google.charts.setOnLoadCallback(function() { drawPieChart(myArrayP, myTitleP, drawDivP); });
+	
+	function drawPieChart(myArray, myTitle, drawDiv) {
+	
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Option');
+		data.addColumn('number', 'People');
+		data.addRows(myArray);
+
+		// Set chart options
+		var options = {title: 	myTitle,
+						titleTextStyle: {fontSize: 25},
+						width: 	"100%",
+						height:	500,
+						sliceVisibilityThreshold:	0,
+						pieSliceText: 'value-and-percentage',
+						enableInteractivity: 'false'
+					};
+
+		var chart = new google.visualization.PieChart(document.getElementById(drawDiv));
+		chart.draw(data, options);
+	}
+	
+//Used for stepped chart, makes an array incrementing by 10 for the horizontal ticks
+function makeTickArray(length){
+	var arrayToReturn = new Array();
+	
+	var i = 0;
+	while(i < length){
+		arrayToReturn.push(i);
+		i += 10;
+	}
+	arrayToReturn.push(length);
+	
+	return arrayToReturn;
+}		
+
+//Used to fix chart problem, adds the value (0, 0) to front and a value for max time x
+//Shifts everything over to make it more cognitive
+function fixStepArray(myArray, videoLength){
+	var newArray = myArray;
+	newArray.unshift([0, 0]);
+	newArray.push([videoLength, 0]);
+	
+	for(var x = newArray.length - 1; x > 0; x--){
+		newArray[x][1] = newArray[x - 1][1];
+	}
+	
+	return newArray;
+}
+
+
+</script>
 {% endblock %}

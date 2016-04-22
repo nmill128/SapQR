@@ -4,7 +4,6 @@
 .customUser{
 	line-height: 1;
     font-weight: 400;
-    margin: 16px 0 0 0;
 }
 .customLabel{
     line-height: 1;
@@ -12,7 +11,9 @@
     margin: 16px 0 0 0;
     text-align: right;
 }
-
+.centerText{
+	text-align: center;
+}
 @media only screen and (min-width : 320px) {
 	.customLabel{
 	    text-align: left;

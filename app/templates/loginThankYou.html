@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+{% block body %}
+<section class="container maxWidthContainer">
+	<h3 class="centerText">Thank You For Logging In!</h3>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">User Info</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<div class="col-md-3 customLabel">
+					Username
+				</div>
+				<div class="col-md-9 customUser">
+					<input type="text" class="form-control" name="username" value="{{ userid }}" readonly /> 
+				</div>
+			</div>
+
+			<p style="margin-top: 35px" class="centerText">Please write down or screenshot your username in case of an accidental logout.</p>
+			<a href="/stationVideo" class="btn btn-primary">Continue</a>
+		</div>
+	</div>
+</section>
+{% endblock %}
