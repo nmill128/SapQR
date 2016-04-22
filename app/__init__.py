@@ -61,7 +61,8 @@ def loginThankYou():
 @app.route("/stationOverview/<id>")
 def stationOverview(id=None):
 	stationEntry = mongo.db.stations.find_one({"station_id":id})
-	return render_template('stationOverview.html')
+	stations = mongo.db.stations.find({"session_id":stationEntry['session_id']})
+	return render_template('stationOverview.html', stations=stations)
 	
 @app.route("/stationQuestions/<id>")
 @login_required
