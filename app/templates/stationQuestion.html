@@ -9,53 +9,20 @@
 		<div class="panel-body">
 			<p>Thank you for compeleting this activity, please take a moment to respond.</p>
 			<form action="/stationOverview">
+				{% for question in questionsList %}
+				{% set qloop = loop.index %}
 				<formset>
-					<p>Do you think sexual assasult occured?</p>
+					<p>{{ question['question'] }}</p>
+					{% for answer in question['answers'] %}
 					<div class="radio radio-primary">
 						<label>
-							<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-							<span class="circle"></span><span class="check"></span>Yes
+							<input type="radio" name="q{{ qloop }}" id="optionsRadios1" value="{{ answer }}" checked="">
+							<span class="circle"></span><span class="check"></span>{{ answer }} 
 						</label>
 					</div>
-					<div class="radio radio-primary">
-						<label>
-							<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-							<span class="circle"></span><span class="check"></span>No
-						</label>
-					</div>
+					{% endfor %}
 				</formset>
-
-				<formset>
-					<p>Did you take any action?</p>
-					<div class="radio radio-primary">
-						<label>
-							<input type="radio" name="optionsRadios1" id="optionsRadios11" value="option1" checked="">
-							<span class="circle"></span><span class="check"></span>Yes
-						</label>
-					</div>
-					<div class="radio radio-primary">
-						<label>
-							<input type="radio" name="optionsRadios1" id="optionsRadios21" value="option2">
-							<span class="circle"></span><span class="check"></span>No
-						</label>
-					</div>
-				</formset>
-
-				<formset>
-					<p>Would you have acted different?</p>
-					<div class="radio radio-primary">
-						<label>
-							<input type="radio" name="optionsRadios2" id="optionsRadios12" value="option1" checked="">
-							<span class="circle"></span><span class="check"></span>Yes
-						</label>
-					</div>
-					<div class="radio radio-primary">
-						<label>
-							<input type="radio" name="optionsRadios2" id="optionsRadios22" value="option2">
-							<span class="circle"></span><span class="check"></span>No
-						</label>
-					</div>
-				</formset>
+				{% endfor %}
 
 				<button id="takeActionButton"  class="btn btn-raised btn-primary" style="display: block;margin:0 auto; width: 200px">Submit</button>
 			</form>

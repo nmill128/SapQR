@@ -15,6 +15,7 @@ app.config['MONGO_DBNAME'] = 'sapQR'
 app.config['DEBUG'] = True
 mongo = PyMongo(app, config_prefix="MONGO")
 
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -28,37 +29,32 @@ def login():
 			return redirect(url_for('loggedIn', next=request.url))
 		return "validate fail"
 	return render_template('login.html', form=form)
-			
+
+#Get for this route in qr views	
+@app.route("/sessionLogin", methods=["POST"])
+def sessionLogin(id=None):
+	form = CreateLoginForm(request.form)
+	if form.validate():
+		session['user_id'] = form.user.get_id()
+		return redirect(url_for('loginThankYou', next=request.url))
+	return "validate fail"
 	
 @app.route("/loggedIn")
 @login_required
 def loggedIn():
-	if session['user_id']:
-		uname = mongo.db.users.find_one({'username': session['user_id']})["username"]
-		
-		return u'<h1>logged in as %s</h1><a href="/logout">logout</a>' % uname
-	else:
-		return redirect(url_for('login', next=request.url))
+	uEntry = mongo.db.users.find_one({'username': session['user_id']})
+	if uEntry:
+		return u'<h1>logged in as %s</h1><a href="/logout">logout</a>' % uEntry["username"]
+	return redirect(url_for('login', next=request.url))
 	
 @app.route("/logout")
 def logout():
 	session['user_id'] = None
 	return redirect(url_for('login', next=request.url))
 	
-@app.route("/sessionLogin", methods=["GET", "POST"])
-def sessionLogin():
-	form = CreateLoginForm(request.form)
-	if request.method == "GET":
-		if session["user_id"]:
-			return redirect(url_for('loginThankYou', next=request.url))
-		counter = mongo.db.counters.find_and_modify(query={'_id': 'username'}, update={ "$inc": { "seq": 1 } }, upsert=False, fullresponse=True)
-		return render_template('sessionLogin.html', username=counter["seq"], form=form, session_id=1)
-	if form.validate():
-		session['user_id'] = form.user.get_id()
-		return redirect(url_for('loginThankYou', next=request.url))
-	return "validate fail"
 
 @app.route("/loginThankYou")
+@login_required
 def loginThankYou():
 
     return render_template('loginThankYou.html', userid=session["user_id"])
@@ -67,13 +63,24 @@ def loginThankYou():
 def stationOverview():
     return render_template('stationOverview.html')
 	
-@app.route("/stationQuestion")
-def stationQuestion():
-    return render_template('stationQuestion.html') 
+@app.route("/stationQuestions/<id>")
+@login_required
+def stationQuestion(id=None):
+	stationEntry = mongo.db.stations.find_one({"station_id":id})
+	if stationEntry:
+		userEntry = mongo.db.users.find_one({"username":session["user_id"]})
+		if userEntry["session_id"] == stationEntry["session_id"]:
+			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"])
+		return "you do not have access"
+	return "404"
 	
 @app.route("/stationVideo")
 def stationVideo():
     return render_template('stationVideo.html')
+
+@app.route("/vid")
+def vid():
+	return render_template('vid.html')
 	
 @app.route("/template")
 def template():
