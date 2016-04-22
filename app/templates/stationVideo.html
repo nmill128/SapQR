@@ -8,7 +8,9 @@
 		</div>
 		<div class="panel-body">
 			<div class="embed-responsive embed-responsive-16by9">
-				<iframe  src="https://www.youtube.com/embed/c2ZSZrGc-O8" frameborder="0" allowfullscreen></iframe>
+			  <video id="video" width="100%" onclick="play()">
+			    <source src="/static/vid/{{ video }}" type="video/mp4">	
+			  </video>
 			</div>
 			<div class="row">
 				<div class="col-xs-4">Comfortable</div>
@@ -36,6 +38,12 @@
 
 {% block script %}
 <script>
+	var myVideo = document.getElementById("video"); 
+
+	function play() { 
+	    if (myVideo.paused) 
+	        myVideo.play();
+	} 
 
 	var comfortSlider = document.getElementById('comfortSlider');
 
