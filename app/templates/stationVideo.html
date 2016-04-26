@@ -7,15 +7,17 @@
 			<h3 class="panel-title">Video</h3>
 		</div>
 		<div class="panel-body">
+			<div id="videoInstruction" class="row" style="padding: 25px 0; text-decoration: underline;">
+				<p><b>Instructions</b></p>
+				<p>Click on the video to start the activity</p>
+				<p>Move the slider to your comfort level during the video</p>
+			</div>
 			<div class="embed-responsive embed-responsive-16by9">
 			  <video id="video" width="100%" onclick="play()">
 			    <source src="/static/vid/{{ video }}" type="video/mp4">	
 			  </video>
 			</div>
-			<div id="videoInstruction" class="row">
-				<p>Click on the video to start the activity</p>
-				<p>Move the slider to your comfort level during the video</p>
-			</div>
+			
 			<div class="row">
 				<div class="col-xs-4">Comfortable</div>
 				<div class="col-xs-4 col-xs-offset-4 text-right">Uncomfortable</div>
