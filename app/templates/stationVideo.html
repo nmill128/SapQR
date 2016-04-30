@@ -44,41 +44,71 @@
 
 {% block script %}
 <script>
-	// Video
-	var myVideo = document.getElementById("video"); 
+	$(document).ready(function(){
 
-	function play() { 
-	    if (myVideo.paused) 
-	        myVideo.play();
-	    $('#videoInstruction').hide();
+		// Video
+		var myVideo = document.getElementById("video"); 
 
-	} 
-	myVideo.addEventListener('ended',myHandler,false);
-    function myHandler(e) {
-        window.location.replace("/stationQuestion/{{ id }}");
-    }
+		function play() { 
+		    if (myVideo.paused) 
+		        myVideo.play();
+		    $('#videoInstruction').hide();
+
+		} 
+		myVideo.addEventListener('ended',myHandler,false);
+	    function myHandler(e) {
+	        window.location.replace("/stationQuestion/{{ id }}");
+	    }
 
 
 
-	// Slider
-	var comfortSlider = document.getElementById('comfortSlider');
+		// Slider
+		var comfortSlider = document.getElementById('comfortSlider');
 
-	noUiSlider.create(comfortSlider,{
-		start: 1,
-		step: 10,
-		range: {
-			'min':  0 ,
-			'max': 100 
-		},
-	});
+		noUiSlider.create(comfortSlider,{
+			start: 1,
+			step: 10,
+			range: {
+				'min':  0 ,
+				'max': 100 
+			},
+		});
 
-	comfortSlider.noUiSlider.on('slide', function(){
-		if(comfortSlider.noUiSlider.get() > 69){
-			$('#takeActionButton').css('visibility', 'visible');
-		}
-		else{
-			$('#takeActionButton').css('visibility', 'hidden');
-		}
-	});
+		//Slide Event
+		comfortSlider.noUiSlider.on('slide', function(){
+			if(comfortSlider.noUiSlider.get() > 69){
+				$('#takeActionButton').css('visibility', 'visible');
+			}
+			else{
+				$('#takeActionButton').css('visibility', 'hidden');
+			}
+		});
+
+		//Mouse Up Event
+		comfortSlider.noUiSlider.on('mouseup', function(event){
+			var currentSliderVal = comfortSlider.get();
+			sliderChanged(this.currentTime, currentSliderVal);
+		});
+
+		 var video = document.getElementById("video");   
+
+	    video.onended = function(e) {
+	    	setTimeout( function(){window.location.replace("/stationQuestion/{{ id }}");}, 2000 );	  
+		};
+}
+
+
+// Everytime user change slider, it send update to server
+function sliderChanged(currentTime, currentComfort){
+	var data = {"time":currentTime, "comfort": currentComfort}; 
+	var	url = "www.example.com/POST_ROUTE";
+
+	$.ajax({
+		  type: "POST",
+		  url: url,
+		  data: data
+		});
+}
+
 </script>
 {% endblock %}
