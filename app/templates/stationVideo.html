@@ -87,7 +87,7 @@
             });
 
             //Mouse Up Event
-            comfortSlider.noUiSlider.on('mouseup', function(event) {
+            comfortSlider.noUiSlider.on('change', function(event) {
                 var currentSliderVal = comfortSlider.get();
                 sliderChanged(myVideo.currentTime, currentSliderVal);
             });
