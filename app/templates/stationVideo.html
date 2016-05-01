@@ -88,7 +88,7 @@
 
             //Mouse Up Event
             comfortSlider.noUiSlider.on('change', function(event) {
-                var currentSliderVal = comfortSlider.get();
+                var currentSliderVal = comfortSlider.noUiSlider.get();
                 sliderChanged(myVideo.currentTime, currentSliderVal);
             });
 
