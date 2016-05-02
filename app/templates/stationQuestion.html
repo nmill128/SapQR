@@ -7,8 +7,8 @@
 			<h3 class="panel-title">Survey</h3>
 		</div>
 		<div class="panel-body">
-			<p>Thank you for compeleting this activity, please take a moment to respond.</p>
-			<form action="/stationOverview/{{ id }}">
+			<p>Thank you for completing this activity, please take a moment to respond.</p>
+			<form action="/stationQuestion/{{ id }}" method="POST">
 				{% for question in questionsList %}
 				{% set qloop = loop.index %}
 				<formset>

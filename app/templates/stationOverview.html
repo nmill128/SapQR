@@ -15,7 +15,7 @@
 				<div class="col-xs-2">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" disabled="" checked=""><span class="checkbox-material"></span> 
+							<input type="checkbox" disabled="" {% if listCompleted[loop.index0] %}checked=""{% endif %}><span class="checkbox-material"></span> 
 						</label>
 					</div>
 				</div>

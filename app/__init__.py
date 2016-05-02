@@ -5,6 +5,7 @@ from werkzeug.debug import DebuggedApplication
 from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
 import qrviews
+import json
 
 
 app.wsgi_app = DebuggedApplication(app.wsgi_app, True)
@@ -61,19 +62,43 @@ def loginThankYou():
 @app.route("/stationOverview/<id>")
 def stationOverview(id=None):
 	stationEntry = mongo.db.stations.find_one({"station_id":id})
-	stations = mongo.db.stations.find({"session_id":stationEntry['session_id']})
-	return render_template('stationOverview.html', stations=stations)
+	stations = list(mongo.db.stations.find({"session_id":stationEntry['session_id']}))
+	completedStations = list(mongo.db.stationResponses.find({"username":session['user_id']}))
+	listCompleted = []
+	count = 0
+	while(count < len(stations)):
+		listCompleted.append(False)
+		for completed in completedStations:
+			if completed['station_id'] == stations[count]['station_id']:
+				listCompleted[count] = True
+		count+=1
+	return render_template('stationOverview.html', stations=stations, listCompleted=listCompleted)
 	
-@app.route("/stationQuestions/<id>")
+@app.route("/stationQuestion/<id>", methods=["GET", "POST"])
 @login_required
 def stationQuestion(id=None):
 	stationEntry = mongo.db.stations.find_one({"station_id":id})
 	if stationEntry:
 		userEntry = mongo.db.users.find_one({"username":session["user_id"]})
 		if userEntry["session_id"] == stationEntry["session_id"]:
+			if request.method == "POST":
+				mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':id}, {'$set': {'question_responses':request.form}})				
+				return redirect(url_for('stationOverview', next=request.url, id=id))
 			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"], id=id)
-		return "you do not have access"
-	return "404"
+		return redirect(url_for('/wrongStation', next=request.url))
+	return redirect(url_for('/404', next=request.url))
+	
+@app.route("/sliderData",  methods=["GET"])
+def sliderData():
+	stationResponse = mongo.db.stationResponses.find_one({'username':session['user_id'], 'station_id':request.args['station_id'] })
+	if(stationResponse is None):
+		momments = [{'time':request.args['time'], 'comfort':request.args['comfort']}]
+		mongo.db.stationResponses.insert({'username':session['user_id'], 'station_id':request.args['station_id'], 'momments':momments})
+		return "first"
+	momments = stationResponse['momments']
+	momments.append({'time':request.args['time'], 'comfort':request.args['comfort']})
+	mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':request.args['station_id'] },{'$set': {'momments': momments}})
+	return json.dumps(momments)
 	
 @app.route("/stationVideo")
 def stationVideo():

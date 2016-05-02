@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block body %}
 <section class="container maxWidthContainer">
-	<h3>Station 1</h3>
+	<h3>{{ name }}</h3>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">Video</h3>
@@ -104,18 +104,14 @@
 
         // Everytime user change slider, it send update to server
         function sliderChanged(currentTime, currentComfort) {
-            var data = {
-                "time": currentTime,
-                "comfort": currentComfort
-            };
-            var url = "www.example.com/POST_ROUTE";
-            console.log(data);
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: data
-            });
-        }
+           // var data = {
+            //    "time": currentTime,
+             //   "comfort": currentComfort
+            //};
+            //var url = "http://sapqr.tk/sliderData";
+            //console.log(data);
+            $.getJSON('/sliderData', {time: currentTime, comfort: currentComfort, station_id: {{ id }}});
+        };
 
 </script>
 {% endblock %}
