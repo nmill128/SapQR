@@ -24,3 +24,7 @@
 .sessionTable tr td{
 	cursor: pointer;
 }
+
+.nav-tab > li.active{
+	background-color: #005e55;
+}

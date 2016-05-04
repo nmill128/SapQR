@@ -2,11 +2,15 @@
 {% block body %}
 <section class="container maxWidthContainer">
 	<h3 class="text-center">Station 1</h3>
-	
+	<div style="height:">
+	<button type="button" class="btn-fab-mini btn-primary" aria-label="Left Align">
+	  <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+	</button>
+	</div>
 	<div class="panel panel-primary">
 		<ul class="nav nav-tabs">
-		  <li class="active"><a href="#">Users</a></li>
-		  <li ><a href="#" onclick="showStations()">Stations</a></li>
+		  <li id="userTab" class="active"><a href="#" onclick="showUsers()">Users</a></li>
+		  <li id="stationTab"><a href="#" onclick="showStations()">Stations</a></li>
 		</ul>
 		<div class="panel-body">
 			<table id="users-table" class="table table-striped table-hover sessionTable">
@@ -45,7 +49,7 @@
 			  <tr onclick="window.location.replace('/stationInfo/{{ station.station_id }}')">
 			    <td>{{station.name}}</td>
 			    <td>
-					10
+					{{station.number_compeleted}}
 				</td>
 			  </tr>
 			  {% endfor %}
@@ -57,7 +61,15 @@
 <script type="text/javascript">
 	function showStations(){
 		document.getElementById("stations-table").style = "";
-		document.getElementById("users-table").style = "display:none;"
+		document.getElementById("users-table").style = "display:none;";
+		document.getElementById("userTab").className = "";
+		document.getElementById("stationTab").className = "active";
+	}
+	function showUsers(){
+		document.getElementById("stations-table").style = "display:none;";
+		document.getElementById("users-table").style = "";
+		document.getElementById("userTab").className = "active";
+		document.getElementById("stationTab").className = "";
 	}
 </script>
 {% endblock %}
