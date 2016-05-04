@@ -85,7 +85,8 @@ def stationQuestion(id=None):
 		userEntry = mongo.db.users.find_one({"username":session["user_id"]})
 		if userEntry["session_id"] == stationEntry["session_id"]:
 			if request.method == "POST":
-				mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':id}, {'$set': {'question_responses':request.form}})				
+				mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':id}, {'$set': {'question_responses':request.form}})
+				mongo.db.stations.update({'station_id':id}, {'$inc':{'number_completed': 1}})
 				return redirect(url_for('stationOverview', next=request.url, id=id))
 			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"], id=id, name=stationEntry['name'])
 		return redirect(url_for('/wrongStation', next=request.url))
