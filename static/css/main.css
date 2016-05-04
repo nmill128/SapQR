@@ -25,6 +25,6 @@
 	cursor: pointer;
 }
 
-.nav-tab > li.active{
+.nav-tabs > li.active{
 	background-color: #005e55;
 }
