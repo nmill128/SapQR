@@ -11,6 +11,7 @@
 				<!-- Insert Chart in this div inside this Div -->
 				<h4 class="text-center">Chart</h4>
 				
+				<div id="pie_chart"></div>
 				<div id="step_chart"></div>
 				<!-- End of Insert Chart in this div inside this Div -->
 			</div>
@@ -80,6 +81,29 @@
 	var myTitleP = "Temp Title Test";
 	var drawDivP = "pie_chart";
 	
+	google.charts.setOnLoadCallback(function() { drawPieChart(myArrayP, myTitleP, drawDivP); });
+			
+			function drawPieChart(myArray, myTitle, drawDiv) {
+			
+				// Create the data table.
+				var data = new google.visualization.DataTable();
+				data.addColumn('string', 'Option');
+				data.addColumn('number', 'People');
+				data.addRows(myArray);
+
+				// Set chart options
+				var options = {title: 	myTitle,
+								titleTextStyle: {fontSize: 25},
+								width: 	800,
+								height:	500,
+								sliceVisibilityThreshold:	0,
+								pieSliceText: 'value-and-percentage',
+								enableInteractivity: 'false'
+							};
+
+				var chart = new google.visualization.PieChart(document.getElementById(drawDiv));
+				chart.draw(data, options);
+			}
 		
 //Used for stepped chart, makes an array incrementing by 10 for the horizontal ticks
 function makeTickArray(length){
