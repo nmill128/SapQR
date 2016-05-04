@@ -16,51 +16,10 @@
 				<!-- End of Insert Chart in this div inside this Div -->
 			</div>
 			<div class="col-md-4 col-xs-12">
-				<h4 class="text-center">Poll Stats</h4>
-				<table>
-				<tr>
-				<td>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" checked="" ><span class="checkbox-material">
-							<!-- <span class="check"></span> -->
-							</span> 
-						</label>
-					</div>
-					</td>
-					<td>
-						Prevent Assasult
-					</td>
-				</tr>
-				<tr>
-				<td>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material">
-							<!-- <span class="check"></span> -->
-							</span> 
-						</label>
-					</div>
-					</td>
-					<td>
-						Looked out for other
-					</td>
-				</tr>
-				<tr>
-				<td>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material">
-							<!-- <span class="check"></span> -->
-							</span> 
-						</label>
-					</div>
-					</td>
-					<td>
-						Assisted Victim
-					</td>
-				</tr>
-				</table>
+				<h4 class="text-center">Poll Questions</h4>
+				<div id="pie_chart_1"></div>
+				<div id="pie_chart_2"></div>
+				<div id="pie_chart_3"></div>
 			</div>
 		</div>
 	</div>
@@ -81,7 +40,12 @@
 	var myTitleP = "Temp Title Test";
 	var drawDivP = "pie_chart";
 	
-	google.charts.setOnLoadCallback(function() { drawPieChart(myArrayP, myTitleP, drawDivP); });
+	google.charts.setOnLoadCallback(function() { 
+		drawPieChart(myArrayP, myTitleP, drawDivP); 
+		drawPieChart(myArrayP, myTitleP, "pie_chart_1");
+		drawPieChart(myArrayP, myTitleP, "pie_chart_2");
+		drawPieChart(myArrayP, myTitleP, "pie_chart_3");
+	});
 			
 			function drawPieChart(myArray, myTitle, drawDiv) {
 			
