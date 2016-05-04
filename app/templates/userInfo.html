@@ -1,37 +1,27 @@
 {% extends "template.html" %}
 {% block body %}
 <section class="container maxWidthContainer">
-	<h3 class="text-center">Luciano</h3>
+	<h3 class="text-center">{{user.username}}</h3>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">User Info</h3>
 		</div>
 		<div class="panel-body">
-			<p>Age: 21</p>
-			<p>Gender: Male</p>
+			<p>Age: {{user.age}}</p>
+			<p>Gender: {{user.gender}}</p>
 			<h4>Compeleted Station</h4>
+			{% for station in stations %}
 			<div class="row">
-				<div class="col-xs-10">Station 1 : Sexual Prevention</div>
+				<div class="col-xs-10">{{ station.name }}</div>
 				<div class="col-xs-2">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" disabled="" checked=""><span class="checkbox-material"></span> 
+							<input type="checkbox" disabled="" {% if listCompleted[loop.index0] %}checked=""{% endif %}><span class="checkbox-material"></span> 
 						</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-10">Station 2 : Identify Assasult</div>
-				<div class="col-xs-2">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material">
-							<!-- <span class="check"></span> -->
-							</span> 
-						</label>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template, request, redirect, url_for, flash, session
-from user import User, LoginForm, CreateLoginForm, login_required
+from user import User, LoginForm, CreateLoginForm, login_required, facilitator_required
 from werkzeug.debug import DebuggedApplication
 from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
@@ -27,7 +27,10 @@ def login():
 	if request.method == "POST":
 		if form.validate():
 			session['user_id'] = form.user.get_id()
-			return redirect(url_for('loggedIn', next=request.url))
+			userEntry = mongo.db.users.find_one({'username':session['user_id']})
+			if userEntry['facilitator']:
+				return redirect(url_for('sessionList', next=request.url))
+			return redirect(url_for('loginThankYou', next=request.url))
 		return "validate fail"
 	return render_template('login.html', form=form)
 
@@ -48,7 +51,7 @@ def loggedIn():
 		return u'<h1>logged in as %s</h1><a href="/logout">logout</a>' % uEntry["username"]
 	return redirect(url_for('login', next=request.url))
 	
-@app.route("/logout")
+@app.route("/logout") 
 def logout():
 	session['user_id'] = None
 	return redirect(url_for('login', next=request.url))
@@ -84,7 +87,7 @@ def stationQuestion(id=None):
 			if request.method == "POST":
 				mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':id}, {'$set': {'question_responses':request.form}})				
 				return redirect(url_for('stationOverview', next=request.url, id=id))
-			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"], id=id)
+			return render_template('stationQuestion.html', questionsList=stationEntry["questionsList"], id=id, name=stationEntry['name'])
 		return redirect(url_for('/wrongStation', next=request.url))
 	return redirect(url_for('/404', next=request.url))
 	
@@ -100,13 +103,6 @@ def sliderData():
 	mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':request.args['station_id'] },{'$set': {'momments': momments}})
 	return json.dumps(momments)
 	
-@app.route("/stationVideo")
-def stationVideo():
-    return render_template('stationVideo.html')
-
-@app.route("/vid")
-def vid():
-	return render_template('vid.html')
 	
 @app.route("/template")
 def template():
@@ -117,19 +113,40 @@ def adminLogin():
     return render_template('login.html')
 
 @app.route("/sessionList")
+@facilitator_required
 def sessionList():
-    return render_template('sessionList.html')
+	userEntry = mongo.db.users.find_one({'username':session['user_id']})
+	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
+	return render_template('sessionList.html', sessions=sessions)
 
-@app.route("/sessionInfo")
-def sessionInfo():
-    return render_template('sessionInfo.html')
+@app.route("/sessionInfo/<id>")
+@facilitator_required
+def sessionInfo(id=None):
+	sessionEntry = mongo.db.sessions.find_one({'session_id':id})
+	if sessionEntry:
+		usersList = list(mongo.db.users.find({'session_id':id}))
+		stationsList = list(mongo.db.stations.find({'session_id':id}))
+		return render_template('sessionInfo.html', users=usersList, stations=stationsList)
+	return redirect(url_for('404', next=request.url))
 
-@app.route("/userInfo")
-def userInfo():
-    return render_template('userInfo.html')
+@app.route("/userInfo/<username>")
+@facilitator_required
+def userInfo(username=None):
+	userEntry = mongo.db.users.find_one({'username':username})
+	stations = list(mongo.db.stations.find({"session_id":userEntry['session_id']}))
+	completedStations = list(mongo.db.stationResponses.find({"username":username}))
+	listCompleted = []
+	count = 0
+	while(count < len(stations)):
+		listCompleted.append(False)
+		for completed in completedStations:
+			if completed['station_id'] == stations[count]['station_id']:
+				listCompleted[count] = True
+		count+=1
+	return render_template('userInfo.html', user=userEntry, stations=stations, listCompleted=listCompleted)
 
-@app.route("/stationInfo")
-def stationInfo():
+@app.route("/stationInfo/<id>") 
+def stationInfo(id=None):
     return render_template('stationInfo.html')
 
 @app.route("/wrongStation")
@@ -141,4 +158,4 @@ def error404():
     return render_template('404.html')
 
 if __name__ == "__main__":
-    app.run(debug=True)#,use_debugger=True)
+    app.run(debug=True)

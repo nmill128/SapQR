@@ -15,30 +15,15 @@
 			  </tr>
 			  </thead>
 			  <tbody>
-			  <tr>
-			    <td>Session 1</td>
-			    <td>Feb 27 2016</td>
+			  {% if sessions|length == 0%}
+					No sessions
+			  {% endif %}
+			  {% for session in sessions %}
+			  <tr onclick="window.location.replace('/sessionInfo/{{ session.session_id }}')">
+			    <td>{{session.name}}</td>
+			    <td>{{session.session_date.strftime('%Y-%m-%d') }}</td> 
 			  </tr>
-			  <tr>
-			    <td>Session 2</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Session 3</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Session 5</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Session 6</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Session 7</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
+			  {% endfor %}
 			  </tbody>
 			</table>
 		</div>

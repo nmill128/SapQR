@@ -106,3 +106,19 @@ def login_required(f):
 			return redirect(url_for('login', next=request.url))
 		return f(*args, **kwargs)
 	return decorated_function
+	
+def facilitator_required(f):
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if "user_id" in session:
+			if not session["user_id"]:
+				return redirect(url_for('login', next=request.url))
+			else:
+				userEntry = app.mongo.db.users.find_one({'username':session['user_id']})
+				if userEntry['facilitator']:
+					return f(*args, **kwargs)
+				return redirect(url_for('loginThankYou', next=request.url))
+		else:
+			return redirect(url_for('login', next=request.url))
+		return f(*args, **kwargs)
+	return decorated_function

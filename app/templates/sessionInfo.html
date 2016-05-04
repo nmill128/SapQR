@@ -5,21 +5,22 @@
 	
 	<div class="panel panel-primary">
 		<ul class="nav nav-tabs">
-		  <li class="active"><a href="#">User</a></li>
-		  <li><a href="#">Station</a></li>
+		  <li class="active"><a href="#">Users</a></li>
+		  <li ><a href="#" onclick="showStations()">Stations</a></li>
 		</ul>
 		<div class="panel-body">
-			<table class="table table-striped table-hover sessionTable">
+			<table id="users-table" class="table table-striped table-hover sessionTable">
 			  <thead>
 			  <tr>
-			    <th>Name</th>
+			    <th>User Id</th>
 			    <th>Completed</th>
 			    <th>Date</th>
 			  </tr>
 			  </thead>
 			  <tbody>
-			  <tr>
-			    <td>Dam Son</td>
+			  {% for user in users %}
+			  <tr onclick="window.location.replace('/userInfo/{{ user.username }}')">
+			    <td>{{user.username}}</td>
 			    <td>
 			    	<div class="checkbox">
 						<label>
@@ -29,64 +30,34 @@
 				</td>
 			    <td>Feb 27 2016</td>
 			  </tr>
+			  {% endfor %}
+			  </tbody>
+			</table>
+			<table id="stations-table" class="table table-striped table-hover sessionTable" style="display:none">
+			  <thead>
 			  <tr>
-			    <td>Dan</td>
-			    <td>
-			    	<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
-				</td>
-			    <td>Feb 27 2016</td>
+			    <th>Station Name</th>
+			    <th>Number Completed</th>
 			  </tr>
-			  <tr>
-			    <td>Daniel</td>
+			  </thead>
+			  <tbody>
+			  {% for station in stations %}
+			  <tr onclick="window.location.replace('/stationInfo/{{ station.station_id }}')">
+			    <td>{{station.name}}</td>
 			    <td>
-			    	<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
+					10
 				</td>
-			    <td>Feb 27 2016</td>
 			  </tr>
-			  <tr>
-			    <td>Will</td>
-			    <td>
-			    	<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
-				</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Van</td>
-			    <td>
-			    	<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
-				</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
-			  <tr>
-			    <td>Da Phuc</td>
-			    <td>
-			    	<div class="checkbox">
-						<label>
-							<input type="checkbox" disabled="" ><span class="checkbox-material"></span> 
-						</label>
-					</div>
-				</td>
-			    <td>Feb 27 2016</td>
-			  </tr>
+			  {% endfor %}
 			  </tbody>
 			</table>
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	function showStations(){
+		document.getElementById("stations-table").style = "";
+		document.getElementById("users-table").style = "display:none;"
+	}
+</script>
 {% endblock %}
