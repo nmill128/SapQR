@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block body %}
 <section class="container">
-	<h3 class="text-center">Station 1</h3>
+	<h3 class="text-center">{{station.name}}</h3>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">Station information</h3>
@@ -36,15 +36,15 @@
 	//myArray is the array of multiple choice options in format [['Option1', X1], ['Option2', X2], ... , ['Option i', Xi]]
 	//myTitle is a string title of the chart
 	//drawDiv is the name of the div or element to draw the chart in, as a string
-	var myArrayP = [['Male', 10], ['Female', 20], ['Other', 3], ['Choose Not to Identify', 0]];
+	var genderArray = [['Male', {{gender['Male']}}], ['Female', {{gender['Female']}}], ['Other', {{gender['Other']}}], ['Choose Not to Identify', {{gender['Choose not to Identify']}}]];
 	var myTitleP = "Temp Title Test";
 	var drawDivP = "pie_chart";
 	
 	google.charts.setOnLoadCallback(function() { 
-		drawPieChart(myArrayP, myTitleP, drawDivP); 
-		drawPieChart(myArrayP, myTitleP, "pie_chart_1");
-		drawPieChart(myArrayP, myTitleP, "pie_chart_2");
-		drawPieChart(myArrayP, myTitleP, "pie_chart_3");
+		drawPieChart(genderArray, "Gender Breakdown", drawDivP); 
+		drawPieChart(genderArray, myTitleP, "pie_chart_1");
+		drawPieChart(genderArray, myTitleP, "pie_chart_2");
+		drawPieChart(genderArray, myTitleP, "pie_chart_3");
 	});
 			
 			function drawPieChart(myArray, myTitle, drawDiv) {

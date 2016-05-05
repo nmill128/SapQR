@@ -148,7 +148,13 @@ def userInfo(username=None):
 
 @app.route("/stationInfo/<id>") 
 def stationInfo(id=None):
-    return render_template('stationInfo.html')
+	stationEntry = mongo.db.stations.find_one({'station_id':id})
+	stationResponses = list(mongo.db.stationResponses.find({'station_id':id}))
+	gender = {'Male':0, 'Female':0, 'Other':0, 'Choose not to Identify':0}
+	for stationResponse in stationResponses:
+		userEntry = mongo.db.users.find_one({'username':stationResponse['username']})
+		gender[userEntry['gender']] += 1
+	return render_template('stationInfo.html', gender=gender, station=stationEntry)
 
 @app.route("/wrongStation")
 def wrongStation():

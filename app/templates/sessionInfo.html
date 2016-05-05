@@ -21,7 +21,7 @@
 			  </thead>
 			  <tbody>
 			  {% for user in users %}
-			  <tr onclick="window.location.replace('/userInfo/{{ user.username }}')">
+			  <tr onclick="window.location.href ='/userInfo/{{ user.username }}'">
 			    <td>{{user.username}}</td>
 			    <td>
 			    	<div class="checkbox">
@@ -44,10 +44,10 @@
 			  </thead>
 			  <tbody>
 			  {% for station in stations %}
-			  <tr onclick="window.location.replace('/stationInfo/{{ station.station_id }}')">
+			  <tr onclick="window.location.href = '/stationInfo/{{ station.station_id }}'">
 			    <td>{{station.name}}</td>
 			    <td>
-					{{station.number_compeleted}}
+					{{station.number_completed}}
 				</td>
 			  </tr>
 			  {% endfor %}
