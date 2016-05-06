@@ -17,9 +17,9 @@
 			</div>
 			<div class="col-md-4 col-xs-12">
 				<h1 class="text-center">Poll Questions</h1>
-				<div id="pie_chart_1"></div>
-				<div id="pie_chart_2"></div>
-				<div id="pie_chart_3"></div>
+				{% for question in questions %}
+					<div id="pie_chart_{{loop.index0}}"></div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -37,14 +37,15 @@
 	//myTitle is a string title of the chart
 	//drawDiv is the name of the div or element to draw the chart in, as a string
 	var genderArray = [['Male', {{gender['Male']}}], ['Female', {{gender['Female']}}], ['Other', {{gender['Other']}}], ['Choose Not to Identify', {{gender['Choose not to Identify']}}]];
+	var questions = {{questions|tojson}}
 	var myTitleP = "Temp Title Test";
 	var drawDivP = "pie_chart";
 	
 	google.charts.setOnLoadCallback(function() { 
 		drawPieChart(genderArray, "Gender Breakdown", drawDivP); 
-		drawPieChart(genderArray, myTitleP, "pie_chart_1");
-		drawPieChart(genderArray, myTitleP, "pie_chart_2");
-		drawPieChart(genderArray, myTitleP, "pie_chart_3");
+		for(var x = 0; x < questions.length; x++){
+			drawPieChart(questions[x]['answers'], questions[x]['question'], "pie_chart_" + x.toString());
+		}
 	});
 			
 			function drawPieChart(myArray, myTitle, drawDiv) {
@@ -106,11 +107,12 @@ function fixStepArray(myArray, videoLength){
 //************May run somewhat slow for large data sets********************
 var myArrayST = [['Male', [[12, 10], [22, 30], [45, 50]]], ['Female', [[16, 30], [34, 50], [56, 80]]], ['Other', [[23, 30], [40, 60], [76, 100]]], ['Choose Not to Identify', [[35, 80]]]];
 var maxVidSizeS = 120;
+var useArray = [['Average', {{average_momments|tojson}}]]
 var myTitleS = "Title Test Stepped";
 var drawDivS = "step_chart";
 	
 //Draw a stepped chart
-google.charts.setOnLoadCallback(function() { drawSteppedChart(myArrayST, maxVidSizeS, myTitleS, drawDivS); });
+google.charts.setOnLoadCallback(function() { drawSteppedChart(useArray, maxVidSizeS, myTitleS, drawDivS); });
 	
 function drawSteppedChart(myArray, maxVidSize, myTitle, drawDiv) {
 

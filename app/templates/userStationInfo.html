@@ -10,8 +10,8 @@
 			<div class="col-md-6 col-xs-12">
 				<!-- User Info -->
 				<h1 class="text-center">User Info</h1>
-				<p><strong>Gender: </strong>Male</p>
-				<p><strong>Age: </strong> Female</p>
+				<p><strong>Gender: </strong>{{ user.gender }}</p>
+				<p><strong>Age: </strong>{{ user.age }}</p>
 				<!-- End of User Info -->
 				<div id="step_chart"></div>
 			</div>
@@ -19,34 +19,16 @@
 				<h1 class="text-center">Poll Questions</h1>
 				
 				<div class="list-group">
-				  <!-- Start Repeat -->
+				  {% for question in questions %}
 				  <div class="list-group-item">
 				    <div class="row-content">
-				      <h4 class="list-group-item-heading">Did sexual assault occur?</h4>
-				      <p class="list-group-item-text">Yes</p>
+				      <h4 class="list-group-item-heading">{{question.question}}</h4>
+				      <p class="list-group-item-text">{{answers['q' + loop.index|string]}}</p>
 				    </div>
 				  </div>
+				  {% endfor %}
 
-				  <div class="list-group-separator"></div>
-				  <!-- End of Repeat -->
 
-				  
-				  <div class="list-group-item">
-				    <div class="row-content">
-				      <h4 class="list-group-item-heading">Did sexual assault occur?</h4>
-				      <p class="list-group-item-text">Yes</p>
-				    </div>
-				  </div>
-
-				  <div class="list-group-separator"></div>
-				 
-
-				  <div class="list-group-item">
-				    <div class="row-content">
-				      <h4 class="list-group-item-heading">Did sexual assault occur?</h4>
-				      <p class="list-group-item-text">Yes</p>
-				    </div>
-				  </div>
 
 				  <div class="list-group-separator"></div>
 				</div>
@@ -67,16 +49,16 @@
 	//myArray is the array of multiple choice options in format [['Option1', X1], ['Option2', X2], ... , ['Option i', Xi]]
 	//myTitle is a string title of the chart
 	//drawDiv is the name of the div or element to draw the chart in, as a string
-	var genderArray = [['Male', {{gender['Male']}}], ['Female', {{gender['Female']}}], ['Other', {{gender['Other']}}], ['Choose Not to Identify', {{gender['Choose not to Identify']}}]];
+	var genderArray = [['Male', 1]];
 	var myTitleP = "Temp Title Test";
 	var drawDivP = "pie_chart";
 	
-	google.charts.setOnLoadCallback(function() { 
-		drawPieChart(genderArray, "Gender Breakdown", drawDivP); 
-		drawPieChart(genderArray, myTitleP, "pie_chart_1");
-		drawPieChart(genderArray, myTitleP, "pie_chart_2");
-		drawPieChart(genderArray, myTitleP, "pie_chart_3");
-	});
+	//google.charts.setOnLoadCallback(function() { 
+	//	drawPieChart(genderArray, "Gender Breakdown", drawDivP); 
+	//	drawPieChart(genderArray, myTitleP, "pie_chart_1");
+	//	drawPieChart(genderArray, myTitleP, "pie_chart_2");
+	//	drawPieChart(genderArray, myTitleP, "pie_chart_3");
+	//});
 			
 			function drawPieChart(myArray, myTitle, drawDiv) {
 			
@@ -135,7 +117,7 @@ function fixStepArray(myArray, videoLength){
 //drawDiv is the name of the div or element to draw the chart in, as a string
 //
 //************May run somewhat slow for large data sets********************
-var myArrayST = [['Male', [[12, 10], [22, 30], [45, 50]]], ['Female', [[16, 30], [34, 50], [56, 80]]], ['Other', [[23, 30], [40, 60], [76, 100]]], ['Choose Not to Identify', [[35, 80]]]];
+var myArrayST = [['Comfort', {{momments|tojson}}]];
 var maxVidSizeS = 120;
 var myTitleS = "Title Test Stepped";
 var drawDivS = "step_chart";

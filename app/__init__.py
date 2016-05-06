@@ -151,15 +151,72 @@ def stationInfo(id=None):
 	stationEntry = mongo.db.stations.find_one({'station_id':id})
 	stationResponses = list(mongo.db.stationResponses.find({'station_id':id}))
 	gender = {'Male':0, 'Female':0, 'Other':0, 'Choose not to Identify':0}
+	questions = []
+	qIndex = 0
+	questionsList = stationEntry['questionsList']
+	while qIndex < len(questionsList):
+		question = {'question':questionsList[qIndex]['question'], 'answers': []}
+		for answer in questionsList[qIndex]['answers']:
+			question['answers'].append([answer, 0])
+		questions.append(question)
+		qIndex+= 1
+	momments_list = []
+	average_momments = [[0,0]]
+	usersComfort = {}
 	for stationResponse in stationResponses:
+		usersComfort[stationResponse['username']] = 0
+		momments_list += stationResponse['momments']
 		userEntry = mongo.db.users.find_one({'username':stationResponse['username']})
 		gender[userEntry['gender']] += 1
-	return render_template('stationInfo.html', gender=gender, station=stationEntry)
+		qIndex = 0
+		if 'question_responses' in stationResponse:
+			while qIndex < len(questionsList):
+				answer_response = stationResponse['question_responses']['q' + str(qIndex + 1)]
+				for possible_answer in questions[qIndex]['answers']:
+					if possible_answer[0] == answer_response:
+						possible_answer[1] += 1
+						break;
+				qIndex += 1
+	momments_list = sorted(momments_list, key=mommentKey)
+	for momment in momments_list:
+		usersComfort[momment['username']] = float(momment['comfort'])
+		comfort_total = 0
+		for key in usersComfort:
+			comfort_total += usersComfort[key]
+		average_momments.append([float(momment['time']), comfort_total/len(usersComfort)])
+	return render_template('stationInfo.html', gender=gender, station=stationEntry, questions=questions, average_momments=average_momments)
 
+def mommentKey(momment):
+		return float(momment['time'])
+		
+@app.route("/userStationInfo/<username>/<id>")
+@facilitator_required
+def userStationInfo(username=None, id=None):
+	stationEntry = mongo.db.stations.find_one({'station_id':id})
+	userEntry = mongo.db.users.find_one({'username':username})
+	stationResponse = mongo.db.stationResponses.find_one({'username':username, 'station_id':id})
+	momments = []
+	for momment in stationResponse['momments']:
+		momments.append([float(momment['time']), float(momment['comfort'])])
+	momments = sorted(momments, key=mommentArrayKey) 
+	return render_template('userStationInfo.html', momments=momments, station = stationEntry, user=userEntry, questions=stationEntry['questionsList'], answers=stationResponse['question_responses'])
+	
+def mommentArrayKey(momment):
+	return momment[0]
 @app.route("/wrongStation")
 def wrongStation():
     return render_template('wrongStation.html')
 
+@app.route("/createStation")
+@facilitator_required
+def createStation():
+	return render_template('createStation.html')
+	
+@app.route("/createSession")
+@facilitator_required
+def createSession():
+	return render_template('createSession.html')
+	
 @app.route("/404")
 def error404():
     return render_template('404.html')

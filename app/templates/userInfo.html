@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block body %}
 <section class="container maxWidthContainer">
-	<h3 class="text-center">{{user.username}}</h3>
+	<h3 class="text-center">Participant: {{user.username}}</h3>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">User Info</h3>
@@ -11,7 +11,7 @@
 			<p>Gender: {{user.gender}}</p>
 			<h4>Compeleted Station</h4>
 			{% for station in stations %}
-			<div class="row">
+			<div class="row" {% if listCompleted[loop.index0] %}onclick="window.location.href = '/userStationInfo/{{user.username}}/{{station.station_id}}'" style="cursor:pointer;"{% endif %}> 
 				<div class="col-xs-10">{{ station.name }}</div>
 				<div class="col-xs-2">
 					<div class="checkbox">
