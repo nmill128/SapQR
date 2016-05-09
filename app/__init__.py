@@ -6,7 +6,7 @@ from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
 import qrviews
 import json
-
+import os
 
 app.wsgi_app = DebuggedApplication(app.wsgi_app, True)
 
@@ -207,10 +207,25 @@ def mommentArrayKey(momment):
 def wrongStation():
     return render_template('wrongStation.html')
 
-@app.route("/createStation")
+@app.route("/createStation/<session_id>", methods=["GET", "POST"])
 @facilitator_required
-def createStation():
-	return render_template('createStation.html')
+def createStation(session_id=None):
+	if request.method == "POST":
+		return "post"
+	vidNames = os.listdir("/home/ec2-user/SapQR/static/vid") 
+	choosenSession = mongo.db.sessions.find({'session_id':session_id})
+	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
+	return render_template('createStation.html', vidNames=vidNames, sessions = sessions, choosenSession=choosenSession)
+	
+@app.route("/createStation", methods=["POST"])
+@facilitator_required
+def createStationPost():
+	if request.method == "POST":
+		return "post"
+	choosenSession = mongo.db.sessions.find({'session_id':session_id})
+	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
+	return render_template('createStation.html', sessions = sessions, choosenSession=choosenSession)
+	
 	
 @app.route("/createSession")
 @facilitator_required
