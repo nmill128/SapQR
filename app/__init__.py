@@ -129,7 +129,7 @@ def sessionInfo(id=None):
 	if sessionEntry:
 		usersList = list(mongo.db.users.find({'session_id':id}))
 		stationsList = list(mongo.db.stations.find({'session_id':id}))
-		return render_template('sessionInfo.html', users=usersList, stations=stationsList)
+		return render_template('sessionInfo.html', users=usersList, stations=stationsList, id=id)
 	return redirect(url_for('error404', next=request.url))
 
 @app.route("/userInfo/<username>")
@@ -223,7 +223,7 @@ def createStationPost():
 	message = ""
 	if request.form['session_id'] and request.form['name'] and request.form['video'] and request.form['questionsList']:
 		station_id = mongo.db.counters.find_one({'_id':'station_id'})['seq']
-		mongo.db.counters.update({'_id':'station_id'}, {'$set':{'seq':'$inc'}})
+		mongo.db.counters.update({'_id':'station_id'}, {'$inc':{'seq':1}})
 		doc = { 'station_id':station_id,
 				'session_id':request.form['session_id'],
 				'name':request.form['name'],
@@ -243,7 +243,7 @@ def createSession():
 	if request.method == 'POST':
 		if request.form['name'] and request.form['session_date']:
 			session_id = mongo.db.counters.find_one({'_id':'session_id'})['seq']
-			mongo.db.counters.update({'_id':'session_id'}, {'$set': {'seq':'$inc'}})
+			mongo.db.counters.update({'_id':'session_id'}, {'$inc': {'seq':1}})
 			date = datetime.datetime.strptime(request.form['session_date'], '%m/%d/%Y')
 			doc = {'session_id':str(session_id),
 					'name': request.form['name'],
