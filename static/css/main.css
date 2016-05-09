@@ -28,3 +28,7 @@
 .nav-tabs > li.active{
 	background-color: #005e55;
 }
+.well.question{
+	padding-top: 0;
+	padding-bottom: 1px;
+}
