@@ -24,7 +24,7 @@
 							Day of Session
 						</div>
 						<div class="col-md-9">
-							 <input data-provide="datepicker">
+							 <input class="datepicker" data-date-format="mm/dd/yyyy">
 						</div>
 					</div>
 
@@ -42,6 +42,8 @@
 {% endblock %}
 {% block script %}
 <script>
-	$('.datepicker').datepicker();
+	$('.datepicker').datepicker({
+	    startDate: '-3d'
+	});
 </script>
 {% endblock %}
