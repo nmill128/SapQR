@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template, request, redirect, url_for, flash, session
 from user import User, LoginForm, CreateLoginForm, login_required, facilitator_required
 from werkzeug.debug import DebuggedApplication
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
 import qrviews
@@ -96,11 +97,11 @@ def stationQuestion(id=None):
 def sliderData():
 	stationResponse = mongo.db.stationResponses.find_one({'username':session['user_id'], 'station_id':request.args['station_id'] })
 	if(stationResponse is None):
-		momments = [{'time':request.args['time'], 'comfort':request.args['comfort']}]
+		momments = [{'time':request.args['time'], 'comfort':request.args['comfort'], 'username':session['user_id']}]
 		mongo.db.stationResponses.insert({'username':session['user_id'], 'station_id':request.args['station_id'], 'momments':momments})
 		return "first"
 	momments = stationResponse['momments']
-	momments.append({'time':request.args['time'], 'comfort':request.args['comfort']})
+	momments.append({'time':request.args['time'], 'comfort':request.args['comfort'], 'username':session['user_id']})
 	mongo.db.stationResponses.update({'username':session['user_id'], 'station_id':request.args['station_id'] },{'$set': {'momments': momments}})
 	return json.dumps(momments)
 	
@@ -235,6 +236,37 @@ def createSession():
 @app.route("/404")
 def error404():
     return render_template('404.html')
+	
+@app.route("/registerFacilitator", methods=['GET', 'POST'])
+def registerFacilitator():
+	message = ""
+	if request.method == 'POST':
+		if request.form['code'] and  request.form['username'] and  request.form['password1'] and  request.form['password2'] and  request.form['first'] and  request.form['last']:
+			if request.form['code'] == 'NEW':
+				oldUser = mongo.db.users.find_one({'username':request.form['username']})
+				if oldUser:		
+					message = "username already taken, please choose another username"
+				else:
+					if not request.form['password1'] == request.form['password2']:
+						message = "password mismatch"
+					else:
+						doc = { 'username':request.form['username'],
+								'password':generate_password_hash(request.form['password1']),
+								'facilitator': True,
+								'first_name':request.form['first'],
+								'last_name':request.form['last']}
+						mongo.db.users.insert(doc)
+						newUser = mongo.db.users.find_one({'username':request.form['username']})
+						if newUser:
+							session['user_id'] = request.form['username']
+							return redirect(url_for('sessionList',  next=request.url))
+						else:
+							message = "persistence error"
+			else:
+				message = "Incorrect create new code"
+		else:
+			message = "missing some fields"
+	return render_template('registerFacilitator.html', message=message)
 
 if __name__ == "__main__":
     app.run(debug=True)
