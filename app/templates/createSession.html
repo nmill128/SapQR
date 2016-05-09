@@ -24,7 +24,7 @@
 							Day of Session
 						</div>
 						<div class="col-md-9">
-							 <input type="date" name="date">
+							 <input data-provide="datepicker">
 						</div>
 					</div>
 
@@ -39,4 +39,9 @@
 		</div>
 	</div>
 </section>
+{% endblock %}
+{% block script %}
+<script>
+	$('.datepicker').datepicker();
+</script>
 {% endblock %}
