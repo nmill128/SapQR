@@ -24,7 +24,7 @@
 							Day of Session
 						</div>
 						<div class="col-md-9">
-							 <input class="datepicker" data-date-format="mm/dd/yyyy" style="margin-top: 8px;">
+							 <input id="sessionDate" class="datepicker" data-date-format="mm/dd/yyyy" style="margin-top: 8px;">
 						</div>
 					</div>
 
@@ -45,6 +45,9 @@
 	$('.datepicker').datepicker({
 	    startDate: '-3d'
 	});
+
+	// Get a date and turn it into a date object
+	//$('#sessionDate').val();
 
 	// Assumes it is in a MM/DD/YYYY string. Takes in a string and return
 	// a date object
