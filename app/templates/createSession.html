@@ -45,5 +45,12 @@
 	$('.datepicker').datepicker({
 	    startDate: '-3d'
 	});
+
+	// Assumes it is in a MM/DD/YYYY string. Takes in a string and return
+	// a date object
+	function convertToJSDateObject(stringObject){
+		var part = stringObject.split("/");
+		return new Date(part[2], part[0], part[1]);
+	}
 </script>
 {% endblock %}
