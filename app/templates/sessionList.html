@@ -17,16 +17,17 @@
 			  <tbody>
 			  {% if sessions|length == 0%}
 					No sessions
+			  {% else %}
+				  {% for session in sessions %}
+				  <tr onclick="window.location.replace('/sessionInfo/{{ session.session_id }}')">
+					<td>{{session.name}}</td>
+					<td>{{session.session_date.strftime('%Y-%m-%d') }}</td> 
+				  </tr>
+				  {% endfor %}
 			  {% endif %}
-			  {% for session in sessions %}
-			  <tr onclick="window.location.replace('/sessionInfo/{{ session.session_id }}')">
-			    <td>{{session.name}}</td>
-			    <td>{{session.session_date.strftime('%Y-%m-%d') }}</td> 
-			  </tr>
-			  <button type="submit" class="btn btn-primary">Create New Session</button>
-			  {% endfor %}
 			  </tbody>
 			</table>
+			<button type="submit" class="btn btn-primary">Create New Session</button>
 		</div>
 	</div>
 </section>

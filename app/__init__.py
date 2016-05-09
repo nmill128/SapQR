@@ -4,6 +4,7 @@ from user import User, LoginForm, CreateLoginForm, login_required, facilitator_r
 from werkzeug.debug import DebuggedApplication
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask.ext.pymongo import PyMongo
+import datetime
 app = Flask(__name__)
 import qrviews
 import json
@@ -129,7 +130,7 @@ def sessionInfo(id=None):
 		usersList = list(mongo.db.users.find({'session_id':id}))
 		stationsList = list(mongo.db.stations.find({'session_id':id}))
 		return render_template('sessionInfo.html', users=usersList, stations=stationsList)
-	return redirect(url_for('404', next=request.url))
+	return redirect(url_for('error404', next=request.url))
 
 @app.route("/userInfo/<username>")
 @facilitator_required
@@ -208,11 +209,9 @@ def mommentArrayKey(momment):
 def wrongStation():
     return render_template('wrongStation.html')
 
-@app.route("/createStation/<session_id>", methods=["GET", "POST"])
+@app.route("/createStation/<session_id>")
 @facilitator_required
-def createStation(session_id=None):
-	if request.method == "POST":
-		return "post"
+def createStation(session_id=None, message=""):
 	vidNames = os.listdir("/home/ec2-user/SapQR/static/vid") 
 	choosenSession = mongo.db.sessions.find({'session_id':session_id})
 	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
@@ -221,17 +220,40 @@ def createStation(session_id=None):
 @app.route("/createStation", methods=["POST"])
 @facilitator_required
 def createStationPost():
-	if request.method == "POST":
-		return "post"
-	choosenSession = mongo.db.sessions.find({'session_id':session_id})
-	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
-	return render_template('createStation.html', sessions = sessions, choosenSession=choosenSession)
+	message = ""
+	if request.form['session_id'] and request.form['name'] and request.form['video'] and request.form['questionsList']:
+		station_id = mongo.db.counters.find_one({'_id':'station_id'})['seq']
+		mongo.db.counters.update({'_id':'station_id'}, {'$set':{'seq':'$inc'}})
+		doc = { 'station_id':station_id,
+				'session_id':request.form['session_id'],
+				'name':request.form['name'],
+				'video':request.form['video'],
+				'questionsList':request.form['questionsList'],
+				'number_completed':0,
+				'Link':'sapqr.tk/qr/station/' + station_id}
+		mongo.db.stations.insert(doc)
+		return redirect(url_for('sessionInfo', id=request.form['session_id'], next=request.url))
+	message = "missing some fields"
+	return redirect(url_for('createStation',  session_id=request.form['session_id'], message=message, next=request.url))	
 	
-	
-@app.route("/createSession")
+@app.route("/createSession", methods=['GET', 'POST'])
 @facilitator_required
 def createSession():
-	return render_template('createSession.html')
+	message = ""
+	if request.method == 'POST':
+		if request.form['name'] and request.form['session_date']:
+			session_id = mongo.db.counters.find_one({'_id':'session_id'})['seq']
+			mongo.db.counters.update({'_id':'session_id'}, {'$set': {'seq':'$inc'}})
+			date = datetime.datetime.strptime(request.form['session_date'], '%m/%d/%Y')
+			doc = {'session_id':str(session_id),
+					'name': request.form['name'],
+					'session_date': date,
+					'owner': session['user_id']}
+			mongo.db.sessions.insert(doc)
+			return redirect(url_for('sessionList', next=request.url))
+		else:
+			message = "missing some fields"
+	return render_template('createSession.html', message = message)
 	
 @app.route("/404")
 def error404():
