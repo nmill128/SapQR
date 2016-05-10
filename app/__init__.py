@@ -215,26 +215,26 @@ def createStation(session_id=None, message=""):
 	vidNames = os.listdir("/home/ec2-user/SapQR/static/vid") 
 	choosenSession = mongo.db.sessions.find({'session_id':session_id})
 	sessions = list(mongo.db.sessions.find({'owner':session['user_id']}))
-	return render_template('createStation.html', vidNames=vidNames, sessions = sessions, choosenSession=choosenSession)
+	return render_template('createStation.html', message=message, vidNames=vidNames, sessions = sessions, choosenSession=choosenSession)
 	
 @app.route("/createStation", methods=["POST"])
 @facilitator_required
 def createStationPost():
 	message = ""
-	if request.form['session_id'] and request.form['name'] and request.form['video'] and request.form['questionsList']:
+	if request.form['session_id'] and (not request.form['name'] == "") and request.form['video'] and request.form['questionsList']:
 		station_id = mongo.db.counters.find_one({'_id':'station_id'})['seq']
 		mongo.db.counters.update({'_id':'station_id'}, {'$inc':{'seq':1}})
-		doc = { 'station_id':station_id,
+		doc = { 'station_id':str(station_id),
 				'session_id':request.form['session_id'],
 				'name':request.form['name'],
 				'video':request.form['video'],
-				'questionsList':request.form['questionsList'],
+				'questionsList':json.loads(request.form['questionsList']),
 				'number_completed':0,
-				'Link':'sapqr.tk/qr/station/' + station_id}
+				'Link':'sapqr.tk/qr/station/' + str(station_id)}
 		mongo.db.stations.insert(doc)
-		return redirect(url_for('sessionInfo', id=request.form['session_id'], next=request.url))
+		return ""
 	message = "missing some fields"
-	return redirect(url_for('createStation',  session_id=request.form['session_id'], message=message, next=request.url))	
+	return message, 400
 	
 @app.route("/createSession", methods=['GET', 'POST'])
 @facilitator_required
@@ -258,6 +258,10 @@ def createSession():
 @app.route("/404")
 def error404():
     return render_template('404.html')
+	
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 	
 @app.route("/registerFacilitator", methods=['GET', 'POST'])
 def registerFacilitator():

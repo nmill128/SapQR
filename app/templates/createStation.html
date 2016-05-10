@@ -6,15 +6,15 @@
 			<h3 class="panel-title">Create Station</h3>
 		</div>
 		<div class="panel-body">
-			<form class="form-horizontal" action="/createStation" method="post" enctype="multipart/form-data">
+			<form class="form-horizontal" onsubmit="return submitForm()">
 				<fieldset> 
-					
+					<p style="color:red; {% if message == "" %} display:none; {% endif %}">{{ message }}</p>
 					<div class="form-group">
 						<div class="col-md-3 customLabel">
 							Session
 						</div>
 						<div class="col-md-9 customUser">
-							<select class="form-control">
+							<select name="session_id" class="form-control">
 								{% for session in sessions %}
 									<option {% if session.session_id == choosenSession.session_id %}selected="selected"{% endif %} value="{{session.session_id}}">{{session.name}}</option>
 								{% endfor %}
@@ -27,7 +27,7 @@
 							Station Name
 						</div>
 						<div class="col-md-9 customUser">
-							<input type="text" name="stationName" class="form-control"/>
+							<input type="text" name="name" class="form-control"/>
 						</div>
 					</div>
 
@@ -36,7 +36,7 @@
 							Video
 						</div>
 						<div class="col-md-9 customUser">
-							<select class="form-control">
+							<select name="video" class="form-control">
 								{% for vidName in vidNames %}
 									<option selected="selected" value="{{vidName}}">{{vidName}}</option>
 								{% endfor %}
@@ -48,87 +48,34 @@
 						<div class="col-md-3 customLabel">
 							Questions
 						</div>
-						<div class="col-md-9">
-							<!-- Question Repeat -->
-							<div class="well question">
-								
-								<div class="row form-group">
-									<div class="col-md-1 customLabel">
-										1:
+						<div class="col-md-9 questions-area">
+							<div id="questions-div">
+								<div class="well question">
+									<div class="row form-group">
+										<div class="col-md-1 customLabel">
+											<span>1</span>:
+										</div>
+										<div class="col-md-11">
+											<input class="form-control" type="text" placeholder="Question"></input>
+										</div>
 									</div>
-									<div class="col-md-11">
-										<input class="form-control" type="text" placeholder="Question Title"></input>
+									<div class=" well group_choice">
+										<p>Choices: </p>
+										<div class="choice-div">
+											<div class="form-group ">
+												<div class="col-md-2 customlabel">
+													<span class="choice">a</span>:
+												</div>
+												<div class="col-md-10">
+													<input class="form-control" type="text"></input>
+												</div>
+											</div>
+										</div>
+										<a class="btn btn-primary" onclick="addChoice(this)">Add Choice</a>
 									</div>
 								</div>
-								
-
-								<div class="row well group_choice">
-									<p>Choices: </p>
-									<!-- Choices Repeat -->
-									<div class="row form-group choice">
-										<div class="col-md-2 customlabel">
-											1:
-										</div>
-										<div class="col-md-10">
-											<textarea class="form-control" rows="1" type="text"></textarea>
-										</div>
-									</div>
-									<!-- Choices Repeat End -->
-
-									<div class="row form-group choice">
-										<div class="col-md-2 customlabel">
-											2:
-										</div>
-										<div class="col-md-10">
-											<textarea class="form-control" rows="1" type="text"></textarea>
-										</div>
-									</div>
-									<a class="btn btn-primary">Add Choice</a>
-								</div>
-								
 							</div>
-							<!-- Question Repeat End -->
-
-							<!-- Question Repeat -->
-							<div class="well question">
-								
-								<div class="row form-group">
-									<div class="col-md-1 customLabel">
-										2:
-									</div>
-									<div class="col-md-11">
-										<input class="form-control" type="text" placeholder="Question Title"></input>
-									</div>
-								</div>
-								
-
-								<div class="row well group_choice">
-									<p>Choices: </p>
-									<!-- Choices Repeat -->
-									<div class="row form-group choice">
-										<div class="col-md-2 customlabel">
-											1:
-										</div>
-										<div class="col-md-10">
-											<textarea class="form-control" rows="1" type="text"></textarea>
-										</div>
-									</div>
-									<!-- Choices Repeat End -->
-
-									<div class="row form-group choice">
-										<div class="col-md-2 customlabel">
-											2:
-										</div>
-										<div class="col-md-10">
-											<textarea class="form-control" rows="1" type="text"></textarea>
-										</div>
-									</div>
-									<a class="btn btn-primary">Add Choice</a>
-								</div>
-								
-							</div>
-							<!-- Question Repeat End -->
-							<a class="btn btn-primary">Add Question</a>
+							<a class="btn btn-primary" onclick="addQuestion(this)">Add Question</a>
 						</div>
 					</div>
 					
@@ -144,4 +91,51 @@
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	function addChoice(elem){
+		lastChoice = elem.previousElementSibling.lastElementChild.firstElementChild.firstElementChild.innerHTML;
+		newChoice = String.fromCharCode(lastChoice.charCodeAt() + 1);
+		elem.previousElementSibling.innerHTML = elem.previousElementSibling.innerHTML + '<div class="form-group ">'
+				+ '<div class="col-md-2 customlabel"><span class="choice">'
+				+ newChoice + '</span>:</div><div class="col-md-10">'
+				+ '<input class="form-control" type="text"></input></div></div>';
+	}
+	
+	function addQuestion(elem) {
+		lastQ = elem.previousElementSibling.lastElementChild.firstElementChild.firstElementChild.firstElementChild.innerHTML;
+		newQ = (parseInt(lastQ) + 1).toString();
+		elem.previousElementSibling.innerHTML = elem.previousElementSibling.innerHTML + '<div class="well question">'									
+				+ '<div class="row form-group"><div class="col-md-1 customLabel"><span>'
+				+ newQ + '</span>:</div><div class="col-md-11"><input class="form-control" type="text" placeholder="Question"></input>'
+				+ '</div></div><div class=" well group_choice"><p>Choices: </p><div class="choice-div"><div class="form-group ">'
+				+ '<div class="col-md-2 customlabel"><span class="choice">a</span>:</div><div class="col-md-10">'
+				+ '<input class="form-control" type="text"></input></div></div></div><a class="btn btn-primary" onclick="addChoice(this)">Add Choice</a></div></div>';
+	}
+	
+	function submitForm(){
+		var questionsList = [];
+		Qs = document.getElementById('questions-div').children;
+		for(var x = 0; x < Qs.length; x++){
+			var doc = {'answers':[]};
+			doc['question'] = Qs[x].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.value;
+			choices = Qs[x].lastElementChild.firstElementChild.nextElementSibling.children;
+			for(var y = 0; y < choices.length; y++){
+				doc['answers'].push(choices[y].firstElementChild.nextElementSibling.firstElementChild.value);
+			}
+			questionsList.push(doc);
+		}
+		var video = document.getElementsByName('video')[0].value;
+		var name = document.getElementsByName('name')[0].value;
+		var session_id = document.getElementsByName('session_id')[0].value;
+		$.post("/createStation", 
+			{video:video, name:name, session_id:session_id, questionsList:JSON.stringify(questionsList)},
+			function(){
+				window.location.href = "/sessionInfo/" + session_id;
+			}
+		).error(function(results){alert('missing some fields');});
+		return false;
+	}
+
+</script>
 {% endblock %}
+
