@@ -51,20 +51,22 @@
 			  {% endfor %}
 	  			
 			  </tbody>
-			  <button type="submit" onclick="window.location.replace('/createStation/{{id}}')" class="btn btn-primary">Create Station</button>
 			</table>
+			<button id="createStationButton"type="submit" onclick="window.location.replace('/createStation/{{id}}')" class="btn btn-primary">Create Station</button>
 		</div>
 	</div>
 </section>
 <script type="text/javascript">
 	function showStations(){
 		document.getElementById("stations-table").style = "";
+		document.getElementById("createStationButton").style = "";
 		document.getElementById("users-table").style = "display:none;";
 		document.getElementById("userTab").className = "";
 		document.getElementById("stationTab").className = "active";
 	}
 	function showUsers(){
 		document.getElementById("stations-table").style = "display:none;";
+		document.getElementById("createStationButton").style = "display:none;";
 		document.getElementById("users-table").style = "";
 		document.getElementById("userTab").className = "active";
 		document.getElementById("stationTab").className = "";
